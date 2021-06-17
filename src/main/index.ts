@@ -36,8 +36,7 @@ function createWindow() {
   mainWindow.loadURL(indexHtmlUrl)
   mainWindow.on('close', (event) => {
     if (process.platform === 'darwin') {
-      event.preventDefault()
-      mainWindow.minimize()
+      mainWindow.hide()
     }
   });
 
