@@ -9,6 +9,7 @@
             <ul>
                 <li>1. 在Node List中，添加节点，支持直接连接数据库，同时支持通过安装Agent节点做中转，用于访问一些本地不能访问的数据库</li>
                 <li>2. Compare 标签页用于比较，分别选择节点和数据库名称后，就会出比较结果，有区别的地方，会用红色标出来</li>
+                <li>3. Compare 标签页右上角的switch,可以切换是否将比较相同的项隐藏掉</li>
             </ul>
         </a-typography-paragraph>
         <a-typography-paragraph>

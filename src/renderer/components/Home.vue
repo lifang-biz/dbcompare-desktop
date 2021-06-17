@@ -1,11 +1,12 @@
 <template>
-    <a-row>
-        <a-col :span="12">
-            <a-row>
-                <a-col :span="12" style="display: flex">
+    <a-row style="min-height: 100%;">
+        <a-col :span="12" style="border-right: 1px solid #ccc;">
+            <a-row type="flex" justify="center">
+                <a-col :span="2">
                     <label class="padding-right-10" style="line-height: 36px;">Node </label>
+                </a-col>
+                <a-col :span="8">
                     <a-select
-                            style="width:100%;margin:0 20px 0 10px;"
                             placeholder="Please select node"
                             @change="handleLeftNodeChange"
                     >
@@ -14,10 +15,11 @@
                         </a-select-option>
                     </a-select>
                 </a-col>
-                <a-col :span="8" style="display: flex">
+                <a-col :span="2" style="display: flex">
                     <label class="padding-right-10" style="line-height: 36px;">Database</label>
+                </a-col>
+                <a-col :span="8">
                     <a-select
-                            style="width:100%;margin:0 20px 0 10px;"
                             placeholder="Select database"
                             @change="handleLeftDatabaseChange"
                     >
@@ -26,22 +28,24 @@
                         </a-select-option>
                     </a-select>
                 </a-col>
-                <a-col :span="3">
+                <a-col :span="2">
                     <a-button @click="refreshLeft">Refresh</a-button>
                 </a-col>
             </a-row>
-            <a-row>
+            <a-row type="flex" justify="center">
                 <compare-list :tableList="leftTableArray" :tableCompareResult="tableCompareResult"
                               :columnCompareResult="columnCompareResult"
                               :indexCompareResult="indexCompareResult" :hideSame="hideSame"></compare-list>
             </a-row>
         </a-col>
-        <a-col :span="12">
-            <a-row>
-                <a-col :span="12" style="display: flex">
+        <a-col :span="12" style="min-height: 100%">
+            <a-row type="flex" justify="center">
+                <a-col :span="2" style="display: flex">
                     <label class="padding-right-10" style="line-height: 36px;">Node:</label>
+                </a-col>
+                <a-col :span="8">
                     <a-select
-                            style="width:100%;margin:0 20px 0 10px;"
+                            style="margin:0 20px 0 10px;"
                             placeholder="Please select node"
                             @change="handleRightNodeChange"
                     >
@@ -50,8 +54,10 @@
                         </a-select-option>
                     </a-select>
                 </a-col>
-                <a-col :span="8" style="display: flex">
+                <a-col :span="2" style="display: flex">
                     <label class="padding-right-10" style="line-height: 36px;">Database:</label>
+                </a-col>
+                <a-col :span="8">
                     <a-select
                             style="width:100%;margin:0 20px 0 10px;"
                             placeholder="Select database"
@@ -62,11 +68,11 @@
                         </a-select-option>
                     </a-select>
                 </a-col>
-                <a-col :span="3">
+                <a-col :span="2">
                     <a-button @click="refreshRight">Refresh</a-button>
                 </a-col>
             </a-row>
-            <a-row>
+            <a-row type="flex" justify="center">
                 <compare-list :tableList="rightTableArray" :tableCompareResult="tableCompareResult"
                               :columnCompareResult="columnCompareResult"
                               :indexCompareResult="indexCompareResult" :hideSame="hideSame"></compare-list>
@@ -96,7 +102,7 @@
                 rightNode: {},
                 leftDatabaseName: '',
                 rightDatabaseName: '',
-                nodes : <any>[],
+                nodes: <any>[],
                 leftDatabaseList: <any>[],
                 rightDatabaseList: <any>[],
 
@@ -112,17 +118,17 @@
             })
 
             const {find} = useService('NedbService')
-            const {getDatabases,getDatabaseInfo} = useService('MySQLService')
+            const {getDatabases, getDatabaseInfo} = useService('MySQLService')
 
             function loadDB() {
-                find(null,null).then(res => {
+                find(null, null).then(res => {
                     data.nodes = res
 
                     //重新更新选中的node,防止在其它地方更新的node的信息
-                    if(data.leftNode) {
+                    if (data.leftNode) {
                         data.leftNode = findNodeById(data.leftNode._id)
                     }
-                    if(data.rightNode) {
+                    if (data.rightNode) {
                         data.rightNode = findNodeById(data.rightNode._id)
                     }
 
@@ -131,7 +137,7 @@
                 })
             }
 
-            function setHideSame(val:boolean){
+            function setHideSame(val: boolean) {
                 hideSame.value = val
             }
 
@@ -146,10 +152,10 @@
                         data.leftNode = node
                         if (node.connect_mode === "1") { // direct
                             getDatabases({
-                                username:data.leftNode.username,
-                                password:data.leftNode.password,
-                                port:data.leftNode.port,
-                                host:data.leftNode.host,
+                                username: data.leftNode.username,
+                                password: data.leftNode.password,
+                                port: data.leftNode.port,
+                                host: data.leftNode.host,
                             }).then((results) => {
                                 data.leftDatabaseList = results
                             }).catch((err) => {
@@ -174,23 +180,23 @@
                 }
             }
 
-            function handleLeftDatabaseChange(value:string) {
+            function handleLeftDatabaseChange(value: string) {
                 const hide = message.loading('Action in progress..', 0);
                 if (data.leftNode) {
                     data.leftDatabaseName = value
                     if (data.leftNode.connect_mode === '1') { // direct connect
                         getDatabaseInfo({
-                            username:data.leftNode.username,
-                            password:data.leftNode.password,
-                            port:data.leftNode.port,
-                            host:data.leftNode.host,
+                            username: data.leftNode.username,
+                            password: data.leftNode.password,
+                            port: data.leftNode.port,
+                            host: data.leftNode.host,
                         }, data.leftDatabaseName).then((res) => {
                             data.leftDatabaseInfo = res
                             compare()
-                            setTimeout(hide,0)
+                            setTimeout(hide, 0)
                         }).catch((err) => {
                             message.error(err.message)
-                            setTimeout(hide,0)
+                            setTimeout(hide, 0)
                         })
                     } else {
                         axios.get(data.leftNode.url + '/database-info?database=' + data.leftDatabaseName, {
@@ -202,28 +208,28 @@
                             } else {
                                 message.error(response.data.msg)
                             }
-                            setTimeout(hide,0)
+                            setTimeout(hide, 0)
                         }).catch((err) => {
                             message.error(err.message)
-                            setTimeout(hide,0)
+                            setTimeout(hide, 0)
                         })
                     }
-                }else{
-                    setTimeout(hide,0)
+                } else {
+                    setTimeout(hide, 0)
                 }
             }
 
-            function handleRightNodeChange(value:string) {
+            function handleRightNodeChange(value: string) {
                 if (value) {
                     let node = findNodeById(value)
                     if (node) {
                         data.rightNode = node
                         if (node.connect_mode === '1') { // direct
                             getDatabases({
-                                username:data.leftNode.username,
-                                password:data.leftNode.password,
-                                port:data.leftNode.port,
-                                host:data.leftNode.host,
+                                username: data.leftNode.username,
+                                password: data.leftNode.password,
+                                port: data.leftNode.port,
+                                host: data.leftNode.host,
                             }).then((results) => {
                                 data.rightDatabaseList = results
                             }).catch((err) => {
@@ -255,17 +261,17 @@
                     data.rightDatabaseName = value
                     if (data.rightNode.connect_mode === '1') { // direct connect
                         getDatabaseInfo({
-                            username:data.leftNode.username,
-                            password:data.leftNode.password,
-                            port:data.leftNode.port,
-                            host:data.leftNode.host,
+                            username: data.leftNode.username,
+                            password: data.leftNode.password,
+                            port: data.leftNode.port,
+                            host: data.leftNode.host,
                         }, data.rightDatabaseName).then((res) => {
                             data.rightDatabaseInfo = res
                             compare()
-                            setTimeout(hide,0)
+                            setTimeout(hide, 0)
                         }).catch((err) => {
                             message.error(err.message)
-                            setTimeout(hide,0)
+                            setTimeout(hide, 0)
                         })
                     } else {
                         axios.get(data.rightNode.url + '/database-info?database=' + data.rightDatabaseName, {
@@ -277,36 +283,36 @@
                             } else {
                                 alert(response.data.msg)
                             }
-                            setTimeout(hide,0)
+                            setTimeout(hide, 0)
                         }).catch((err) => {
                             message.error(err.message)
-                            setTimeout(hide,0)
+                            setTimeout(hide, 0)
                         })
                     }
-                }else{
-                    setTimeout(hide,0)
+                } else {
+                    setTimeout(hide, 0)
                 }
             }
 
             function refreshLeft() {
-                if(!data.leftDatabaseName) {
+                if (!data.leftDatabaseName) {
                     message.warn("Please select database first")
                 }
                 handleLeftDatabaseChange(data.leftDatabaseName)
             }
 
             function refreshRight() {
-                if(!data.rightDatabaseName){
+                if (!data.rightDatabaseName) {
                     message.warn("Please select database first")
                 }
                 handleRightDatabaseChange(data.rightDatabaseName)
             }
 
             // 比较两个数据库的差异
-            function compare () {
+            function compare() {
                 // 将两个对象转成数据，并排序，并补了空行
                 let compareKeys = ['ENGINE', 'TABLE_COLLATION', 'TABLE_COMMENT']
-                let [leftTableArray, rightTableArray, unEqualKeys] = appendMap(data.leftDatabaseInfo, data.rightDatabaseInfo, 'Meta', 'TABLE_NAME',null, compareKeys)
+                let [leftTableArray, rightTableArray, unEqualKeys] = appendMap(data.leftDatabaseInfo, data.rightDatabaseInfo, 'Meta', 'TABLE_NAME', null, compareKeys)
 
                 let columnCompareResult = {}
                 let indexCompareResult = {}
@@ -320,7 +326,7 @@
                         let tempLeftColumns = tempLeftTable['Columns']
                         let tempRightColumns = tempRightTable['Columns']
                         compareKeys = ['COLUMN_TYPE', 'DATETIME_PRECISION', 'IS_NULLABLE', 'NUMERIC_PRECISION', 'COLUMN_COMMENT', 'COLUMN_DEFAULT', 'COLLATION_NAME', 'CHARACTER_SET_NAME', 'EXTRA', 'NUMERIC_SCALE']
-                        let [leftColumnArray, rightColumnArray, columnUnEqualKeys] = appendMap(tempLeftColumns, tempRightColumns, '', 'ORDINAL_POSITION', 'COLUMN_NAME',compareKeys)
+                        let [leftColumnArray, rightColumnArray, columnUnEqualKeys] = appendMap(tempLeftColumns, tempRightColumns, '', 'ORDINAL_POSITION', 'COLUMN_NAME', compareKeys)
                         leftTableArray[i]['Columns'] = leftColumnArray
                         rightTableArray[i]['Columns'] = rightColumnArray
                         columnCompareResult[tempRightTable['Meta']['TABLE_NAME']] = columnUnEqualKeys
@@ -328,7 +334,7 @@
                         let tempLeftIndexes = tempLeftTable['Indexes']
                         let tempRightIndexes = tempRightTable['Indexes']
                         compareKeys = ['INDEX_TYPE', 'INDEX_COMMENT', 'NON_UNIQUE', 'NULLABLE', 'PACKED', 'COLUMN_NAME_ALL']
-                        let [leftIndexArray, rightIndexArray, indexUnEqualKeys] = appendMap(tempLeftIndexes, tempRightIndexes, '', 'INDEX_NAME',null, compareKeys)
+                        let [leftIndexArray, rightIndexArray, indexUnEqualKeys] = appendMap(tempLeftIndexes, tempRightIndexes, '', 'INDEX_NAME', null, compareKeys)
                         leftTableArray[i]['Indexes'] = leftIndexArray
                         rightTableArray[i]['Indexes'] = rightIndexArray
                         indexCompareResult[tempRightTable['Meta']['TABLE_NAME']] = indexUnEqualKeys
@@ -345,7 +351,7 @@
                 data.indexCompareResult = indexCompareResult
             }
 
-            function findNodeById (id:string) {
+            function findNodeById(id: string) {
                 for (let index in data.nodes) {
                     if (data.nodes[index]._id === id) {
                         return data.nodes[index]

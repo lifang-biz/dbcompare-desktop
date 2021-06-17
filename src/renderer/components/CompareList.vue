@@ -1,5 +1,5 @@
 <template>
-  <div class="list-container">
+  <div class="list-container" v-if="tableList.length > 0">
     <div v-for="(table, index) in tableList" :class="{'table':true,'not-exists':table.Meta.IS_PLACEHOLDER === true}">
       <div class="line">
         <span :class="{ 'title':true,'color-red': titleRed(table.Meta) }">{{index+1}}. {{table.Meta.TABLE_NAME}}</span>
@@ -39,6 +39,7 @@
       </div>
     </div>
   </div>
+  <a-empty style="margin-top: 100px;" description="No Data, please select database to compare" v-else/>
 </template>
 
 <script lang="ts">
