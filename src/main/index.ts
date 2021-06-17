@@ -34,6 +34,13 @@ function createWindow() {
   })
 
   mainWindow.loadURL(indexHtmlUrl)
+  mainWindow.on('close', (event) => {
+    if (process.platform === 'darwin') {
+      event.preventDefault()
+      mainWindow.minimize()
+    }
+  });
+
   return mainWindow
 }
 
@@ -42,7 +49,7 @@ if (!app.requestSingleInstanceLock()) {
   app.quit()
 }
 
-app.on('window-all-closed', () => {
+app.on('window-all-closed', (event) => {
   if (process.platform !== 'darwin') {
     app.quit()
   }
