@@ -20,7 +20,7 @@
                 <HowTo></HowTo>
             </a-tab-pane>
             <template #tabBarExtraContent v-if="currentTab==='1'">
-                <a-switch v-model:checked="hideSame" checked-children="Hide Same" un-checked-children="Show Same" @change="switchChanged" />
+                <a-switch checked-children="Hide Same" un-checked-children="Show Same" @change="switchChanged" />
             </template>
         </a-tabs>
     </div>
@@ -51,7 +51,7 @@
                 tabChanged,
                 switchChanged,
                 currentTab: ref('1'),
-                hideSame: ref(true),
+                hideSame: ref(false),
             }
         },
         components: {

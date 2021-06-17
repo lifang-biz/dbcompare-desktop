@@ -14,7 +14,7 @@
 5. 将所有输出打包到实际的 electron 安装包中
 ````npm run build:production````
 # screenshot
-![Image text](src/renderer/assets/screenshot.jpg)
+![Image text](src/renderer/assets/screenshot.png)
 
 # 关于日志
 1. 主线程日志，在控制台看不到。需要使用这个包打印：

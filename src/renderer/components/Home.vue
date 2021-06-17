@@ -89,7 +89,7 @@
         },
         setup() {
             const nodes = ref<any>([]);
-            const hideSame = ref(true);
+            const hideSame = ref(false);
 
             const data = reactive({
                 leftNode: {},
